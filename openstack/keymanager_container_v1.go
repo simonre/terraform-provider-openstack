@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack/keymanager/v1/containers"
-	"github.com/gophercloud/gophercloud/openstack/keymanager/v1/secrets"
 	"github.com/hashicorp/terraform/helper/resource"
 	"strings"
 )
@@ -23,18 +22,15 @@ func keymanagerContainerV1ContainerType(v string) containers.ContainerType {
 	return containertype
 }
 
-func keymanagerContainerV1SecretRefs(v string) []containers.SecretRef {
-	var containertype containers.ContainerType
-	switch v {
-	case "rsa":
-		containertype = containers.RSAContainer
-	case "generics":
-		containertype = containers.GenericContainer
-	case "certificate":
-		containertype = containers.CertificateContainer
-	}
+func keymanagerContainerV1SecretRefs(v map[string]interface{}) []containers.SecretRef {
+	fmt.Errorf("v = %s", v)
+	secretRefs := make([]containers.SecretRef, len(v))
+	for _ = range v {
+		var secretRef containers.SecretRef
 
-	return containertype
+		secretRefs = append(secretRefs, secretRef)
+	}
+	return secretRefs
 }
 
 func keymanagerContainerV1GetUUIDfromContainerRef(ref string) string {

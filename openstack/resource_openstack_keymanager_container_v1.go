@@ -117,7 +117,7 @@ func resourceKeymanagerContainerV1Create(d *schema.ResourceData, meta interface{
 	var createOpts containers.CreateOptsBuilder
 
 	containertype := keymanagerContainerV1ContainerType(d.Get("type").(string))
-	secretRefs := keymanagerContainerV1SecretRefs(d.Get("secret_refs").(string))
+	secretRefs := keymanagerContainerV1SecretRefs(d.Get("secret_refs").(map[string]interface{}))
 
 	createOpts = &containers.CreateOpts{
 		Name:       d.Get("name").(string),
