@@ -577,6 +577,12 @@
 			"revisionTime": "2019-01-25T12:42:42Z"
 		},
 		{
+			"checksumSHA1": "DYJF2mLgcflD/rQQpByGMxVtAt0=",
+			"path": "github.com/gophercloud/gophercloud/openstack/keymanager/v1/containers",
+			"revision": "e102249148e2e09eb5efab07b7c3ea74c161e935",
+			"revisionTime": "2019-01-19T03:36:13Z"
+		},
+		{
 			"checksumSHA1": "LhG21R6yPlBvousxYm96KXmTtYw=",
 			"path": "github.com/gophercloud/gophercloud/openstack/keymanager/v1/secrets",
 			"revision": "e102249148e2e09eb5efab07b7c3ea74c161e935",
@@ -735,13 +741,6 @@
 		{
 			"checksumSHA1": "TH4LSJLhZlq0fW36UVWltFlM3KA=",
 			"path": "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/vlantransparent",
-
-			"revision": "52046867450031e40bd4e94332fe5dbdf5cf51ca",
-			"revisionTime": "2018-12-20T15:44:12Z"
-		},
-		{
-			"checksumSHA1": "TH4LSJLhZlq0fW36UVWltFlM3KA=",
-			"path": "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/vlantransparent",
 			"revision": "e102249148e2e09eb5efab07b7c3ea74c161e935",
 			"revisionTime": "2019-01-19T03:36:13Z"
 		},
@@ -750,6 +749,12 @@
 			"path": "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/vlantransparent",
 			"revision": "80c596f406a38975149db30d9ceddb774f3bfdb7",
 			"revisionTime": "2019-01-12T02:32:49Z"
+		},
+		{
+			"checksumSHA1": "TH4LSJLhZlq0fW36UVWltFlM3KA=",
+			"path": "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/vlantransparent",
+			"revision": "52046867450031e40bd4e94332fe5dbdf5cf51ca",
+			"revisionTime": "2018-12-20T15:44:12Z"
 		},
 		{
 			"checksumSHA1": "grviOYvybawC80v7Fmw0XOBwr0A=",
