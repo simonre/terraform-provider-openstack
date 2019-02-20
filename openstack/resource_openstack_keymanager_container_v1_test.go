@@ -86,8 +86,17 @@ resource "openstack_keymanager_container_v1" "container_1" {
   name = "Test Container"
   secret_refs = [
     {
-      "secret_ref": "http://localhost:9311/v1/secrets/feac9896-49e9-49e0-9484-1a6153c9498b",
-      "name": "a secret"
+      "secret_ref" =  "${openstack_keymanager_secret_v1.secret_1.secret_ref}",
+      "name" = "a secret"
     }
   ]
+}
+
+resource "openstack_keymanager_secret_v1" "secret_1" {
+  algorithm = "aes"
+  bit_length = 256
+  mode = "cbc"
+  name = "mysecret"
+  secret_type = "passphrase"
+  payload = ""
 }`)

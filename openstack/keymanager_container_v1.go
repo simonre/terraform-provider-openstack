@@ -13,7 +13,7 @@ func keymanagerContainerV1ContainerType(v string) containers.ContainerType {
 	switch v {
 	case "rsa":
 		containertype = containers.RSAContainer
-	case "generics":
+	case "generic":
 		containertype = containers.GenericContainer
 	case "certificate":
 		containertype = containers.CertificateContainer
@@ -22,13 +22,13 @@ func keymanagerContainerV1ContainerType(v string) containers.ContainerType {
 	return containertype
 }
 
-func keymanagerContainerV1SecretRefs(v map[string]interface{}) []containers.SecretRef {
-	fmt.Errorf("v = %s", v)
+func keymanagerContainerV1SecretRefs(v []interface{}) []containers.SecretRef {
 	secretRefs := make([]containers.SecretRef, len(v))
-	for _ = range v {
+	for i, item := range v {
 		var secretRef containers.SecretRef
-
-		secretRefs = append(secretRefs, secretRef)
+		secretRef.Name = (item.(map[string]interface{}))["name"].(string)
+		secretRef.SecretRef = (item.(map[string]interface{}))["secret_ref"].(string)
+		secretRefs[i] = secretRef
 	}
 	return secretRefs
 }
