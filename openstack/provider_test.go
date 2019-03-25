@@ -144,7 +144,7 @@ func testAccPreCheckKeyManager(t *testing.T) {
 	testAccPreCheckRequiredEnvVars(t)
 
 	if OS_KEYMANAGER_ENVIRONMENT == "" {
-		t.Skip("This environment does not support Barbican Keymanager tests")
+		t.Skip("This environment does not support Barbican KeyManager tests")
 	}
 }
 

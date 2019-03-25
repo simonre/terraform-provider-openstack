@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func keymanagerContainerV1ContainerType(v string) containers.ContainerType {
+func keyManagerContainerV1ContainerType(v string) containers.ContainerType {
 	var containertype containers.ContainerType
 	switch v {
 	case "rsa":
@@ -22,7 +22,7 @@ func keymanagerContainerV1ContainerType(v string) containers.ContainerType {
 	return containertype
 }
 
-func keymanagerContainerV1SecretRefs(v []interface{}) []containers.SecretRef {
+func keyManagerContainerV1SecretRefs(v []interface{}) []containers.SecretRef {
 	secretRefs := make([]containers.SecretRef, len(v))
 	for i, item := range v {
 		var secretRef containers.SecretRef
@@ -33,7 +33,7 @@ func keymanagerContainerV1SecretRefs(v []interface{}) []containers.SecretRef {
 	return secretRefs
 }
 
-func keymanagerContainerV1GetUUIDfromContainerRef(ref string) string {
+func keyManagerContainerV1GetUUIDfromContainerRef(ref string) string {
 	// container ref has form https://{barbican_host}/v1/containers/{container_uuid}
 	// so we are only interested in the last part
 	ref_split := strings.Split(ref, "/")
@@ -41,7 +41,7 @@ func keymanagerContainerV1GetUUIDfromContainerRef(ref string) string {
 	return uuid
 }
 
-func keymanagerContainerV1WaitForContainerCreation(kmClient *gophercloud.ServiceClient, id string) resource.StateRefreshFunc {
+func keyManagerContainerV1WaitForContainerCreation(kmClient *gophercloud.ServiceClient, id string) resource.StateRefreshFunc {
 	return func() (interface{}, string, error) {
 		fmt.Println("[DEBUG] Waiting for openstack_keymanager_container_v1 with ID %v to be created", id)
 		container, err := containers.Get(kmClient, id).Extract()
@@ -52,7 +52,7 @@ func keymanagerContainerV1WaitForContainerCreation(kmClient *gophercloud.Service
 	}
 }
 
-func keymanagerContainerV1WaitForContainerDeletion(kmClient *gophercloud.ServiceClient, id string) resource.StateRefreshFunc {
+func keyManagerContainerV1WaitForContainerDeletion(kmClient *gophercloud.ServiceClient, id string) resource.StateRefreshFunc {
 	return func() (interface{}, string, error) {
 		err := containers.Delete(kmClient, id).Err
 		if err == nil {

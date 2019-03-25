@@ -11,12 +11,12 @@ import (
 	"github.com/hashicorp/terraform/helper/validation"
 )
 
-func resourceKeymanagerContainerV1() *schema.Resource {
+func resourceKeyManagerContainerV1() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceKeymanagerContainerV1Create,
-		Read:   resourceKeymanagerContainerV1Read,
-		Update: resourceKeymanagerContainerV1Update,
-		Delete: resourceKeymanagerContainerV1Delete,
+		Create: resourceKeyManagerContainerV1Create,
+		Read:   resourceKeyManagerContainerV1Read,
+		Update: resourceKeyManagerContainerV1Update,
+		Delete: resourceKeyManagerContainerV1Delete,
 
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
@@ -107,17 +107,17 @@ func resourceKeymanagerContainerV1() *schema.Resource {
 	}
 }
 
-func resourceKeymanagerContainerV1Create(d *schema.ResourceData, meta interface{}) error {
+func resourceKeyManagerContainerV1Create(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(*Config)
-	kmClient, err := config.keymanagerV1Client(GetRegion(d, config))
+	kmClient, err := config.keyManagerV1Client(GetRegion(d, config))
 	if err != nil {
 		return fmt.Errorf("Error creating OpenStack keymanager client: %s", err)
 	}
 
 	var createOpts containers.CreateOptsBuilder
 
-	containertype := keymanagerContainerV1ContainerType(d.Get("type").(string))
-	secretRefs := keymanagerContainerV1SecretRefs(d.Get("secret_refs").([]interface{}))
+	containertype := keyManagerContainerV1ContainerType(d.Get("type").(string))
+	secretRefs := keyManagerContainerV1SecretRefs(d.Get("secret_refs").([]interface{}))
 
 	createOpts = &containers.CreateOpts{
 		Name:       d.Get("name").(string),
@@ -134,12 +134,12 @@ func resourceKeymanagerContainerV1Create(d *schema.ResourceData, meta interface{
 		return fmt.Errorf("Error creating OpenStack barbican container: %s", err)
 	}
 
-	uuid := keymanagerContainerV1GetUUIDfromContainerRef(container.ContainerRef)
+	uuid := keyManagerContainerV1GetUUIDfromContainerRef(container.ContainerRef)
 
 	stateConf := &resource.StateChangeConf{
 		Pending:    []string{"NOT_CREATED"},
 		Target:     []string{"ACTIVE"},
-		Refresh:    keymanagerContainerV1WaitForContainerCreation(kmClient, uuid),
+		Refresh:    keyManagerContainerV1WaitForContainerCreation(kmClient, uuid),
 		Timeout:    d.Timeout(schema.TimeoutCreate),
 		Delay:      0,
 		MinTimeout: 2 * time.Second,
@@ -153,12 +153,12 @@ func resourceKeymanagerContainerV1Create(d *schema.ResourceData, meta interface{
 
 	d.SetId(uuid)
 
-	return resourceKeymanagerContainerV1Read(d, meta)
+	return resourceKeyManagerContainerV1Read(d, meta)
 }
 
-func resourceKeymanagerContainerV1Read(d *schema.ResourceData, meta interface{}) error {
+func resourceKeyManagerContainerV1Read(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(*Config)
-	kmClient, err := config.keymanagerV1Client(GetRegion(d, config))
+	kmClient, err := config.keyManagerV1Client(GetRegion(d, config))
 	if err != nil {
 		return fmt.Errorf("Error creating OpenStack barbican client: %s", err)
 	}
@@ -187,14 +187,14 @@ func resourceKeymanagerContainerV1Read(d *schema.ResourceData, meta interface{})
 	return nil
 }
 
-func resourceKeymanagerContainerV1Update(d *schema.ResourceData, meta interface{}) error {
+func resourceKeyManagerContainerV1Update(d *schema.ResourceData, meta interface{}) error {
 	// Cannot be updated
-	return resourceKeymanagerContainerV1Read(d, meta)
+	return resourceKeyManagerContainerV1Read(d, meta)
 }
 
-func resourceKeymanagerContainerV1Delete(d *schema.ResourceData, meta interface{}) error {
+func resourceKeyManagerContainerV1Delete(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(*Config)
-	kmClient, err := config.keymanagerV1Client(GetRegion(d, config))
+	kmClient, err := config.keyManagerV1Client(GetRegion(d, config))
 	if err != nil {
 		return fmt.Errorf("Error creating OpenStack barbican client: %s", err)
 	}
@@ -202,7 +202,7 @@ func resourceKeymanagerContainerV1Delete(d *schema.ResourceData, meta interface{
 	stateConf := &resource.StateChangeConf{
 		Pending:    []string{"ACTIVE"},
 		Target:     []string{"DELETED"},
-		Refresh:    keymanagerContainerV1WaitForContainerDeletion(kmClient, d.Id()),
+		Refresh:    keyManagerContainerV1WaitForContainerDeletion(kmClient, d.Id()),
 		Timeout:    d.Timeout(schema.TimeoutCreate),
 		Delay:      0,
 		MinTimeout: 2 * time.Second,
