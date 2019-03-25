@@ -1,7 +1,6 @@
 package openstack
 
 import (
-	"fmt"
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack/keymanager/v1/containers"
 	"github.com/hashicorp/terraform/helper/resource"
@@ -43,7 +42,6 @@ func keyManagerContainerV1GetUUIDfromContainerRef(ref string) string {
 
 func keyManagerContainerV1WaitForContainerCreation(kmClient *gophercloud.ServiceClient, id string) resource.StateRefreshFunc {
 	return func() (interface{}, string, error) {
-		fmt.Println("[DEBUG] Waiting for openstack_keymanager_container_v1 with ID %v to be created", id)
 		container, err := containers.Get(kmClient, id).Extract()
 		if err != nil {
 			return "", "NOT_CREATED", nil
@@ -65,4 +63,15 @@ func keyManagerContainerV1WaitForContainerDeletion(kmClient *gophercloud.Service
 
 		return nil, "ACTIVE", err
 	}
+}
+
+func flattenKeyManagerContainerV1ConsumerCreateOpts(v []interface{}) []containers.CreateConsumerOpts {
+	consumers := make([]containers.CreateConsumerOpts, len(v))
+	for i, item := range v {
+		var consumer containers.CreateConsumerOpts
+		consumer.Name = (item.(map[string]interface{}))["name"].(string)
+		consumer.URL = (item.(map[string]interface{}))["url"].(string)
+		consumers[i] = consumer
+	}
+	return consumers
 }

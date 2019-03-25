@@ -38,8 +38,8 @@ func resourceKeyManagerContainerV1() *schema.Resource {
 
 			"name": {
 				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: false,
+				Optional: true,
+				ForceNew: true,
 			},
 			"container_ref": {
 				Type:     schema.TypeString,
@@ -47,7 +47,6 @@ func resourceKeyManagerContainerV1() *schema.Resource {
 			},
 			"status": {
 				Type:     schema.TypeString,
-				Optional: true,
 				Computed: true,
 			},
 			"creator_id": {
@@ -57,23 +56,24 @@ func resourceKeyManagerContainerV1() *schema.Resource {
 			},
 			"type": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
+				ForceNew: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"rsa", "generic", "certificate",
 				}, true),
 			},
-			"created_at": {
+			"created": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"updated_at": {
+			"updated": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"consumers": {
 				Type:     schema.TypeList,
-				Optional: true,
 				Computed: true,
+				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -89,7 +89,7 @@ func resourceKeyManagerContainerV1() *schema.Resource {
 			},
 			"secret_refs": {
 				Type:     schema.TypeList,
-				Required: true,
+				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -111,7 +111,7 @@ func resourceKeyManagerContainerV1Create(d *schema.ResourceData, meta interface{
 	config := meta.(*Config)
 	kmClient, err := config.keyManagerV1Client(GetRegion(d, config))
 	if err != nil {
-		return fmt.Errorf("Error creating OpenStack keymanager client: %s", err)
+		return fmt.Errorf("Error creating OpenStack KeyManager client: %s", err)
 	}
 
 	var createOpts containers.CreateOptsBuilder
@@ -152,7 +152,16 @@ func resourceKeyManagerContainerV1Create(d *schema.ResourceData, meta interface{
 	}
 
 	d.SetId(uuid)
+	d.Partial(true)
 
+	consumers := flattenKeyManagerContainerV1ConsumerCreateOpts(d.Get("consumers").([]interface{}))
+	for _, consumer := range consumers {
+		_, err := containers.CreateConsumer(kmClient, uuid, consumer).Extract()
+		if err != nil {
+			return fmt.Errorf("Error creating OpenStack container Consumer: %s", err)
+		}
+	}
+	d.Partial(false)
 	return resourceKeyManagerContainerV1Read(d, meta)
 }
 
